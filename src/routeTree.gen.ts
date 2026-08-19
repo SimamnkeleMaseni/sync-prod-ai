@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as EmailRouteImport } from './routes/email'
 import { Route as MeetingsRouteImport } from './routes/meetings'
 import { Route as TasksRouteImport } from './routes/tasks'
@@ -17,6 +18,11 @@ import { Route as TasksRouteImport } from './routes/tasks'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmailRoute = EmailRouteImport.update({
@@ -37,12 +43,14 @@ const TasksRoute = TasksRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/email': typeof EmailRoute
   '/meetings': typeof MeetingsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/email': typeof EmailRoute
   '/meetings': typeof MeetingsRoute
   '/tasks': typeof TasksRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/email': typeof EmailRoute
   '/meetings': typeof MeetingsRoute
   '/tasks': typeof TasksRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/email' | '/meetings' | '/tasks'
+  fullPaths: '/' | '/activity' | '/email' | '/meetings' | '/tasks'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/email' | '/meetings' | '/tasks'
-  id: '__root__' | '/' | '/email' | '/meetings' | '/tasks'
+  to: '/' | '/activity' | '/email' | '/meetings' | '/tasks'
+  id: '__root__' | '/' | '/activity' | '/email' | '/meetings' | '/tasks'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityRoute: typeof ActivityRoute
   EmailRoute: typeof EmailRoute
   MeetingsRoute: typeof MeetingsRoute
   TasksRoute: typeof TasksRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/email': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityRoute: ActivityRoute,
   EmailRoute: EmailRoute,
   MeetingsRoute: MeetingsRoute,
   TasksRoute: TasksRoute,
